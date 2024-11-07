@@ -103,7 +103,12 @@ public enum BaseResponseStatus {
     /**
      * 7000: chat service error
      */
-    NO_DELETE_CHAT_AUTHORITY(HttpStatus.FORBIDDEN, false, 7000, "해당 채팅을 삭제할 권한이 없습니다.");
+    NO_DELETE_CHAT_AUTHORITY(HttpStatus.FORBIDDEN, false, 7000, "해당 채팅을 삭제할 권한이 없습니다."),
+
+    /**
+     * 8000: review service error
+     */
+    ALREADY_WRITTEN_REVIEW(HttpStatus.FORBIDDEN, false, 8000, "이미 리뷰를 작성했습니다.");
 
     private final HttpStatusCode httpStatusCode;
     private final boolean isSuccess;

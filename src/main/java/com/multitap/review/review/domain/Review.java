@@ -2,6 +2,7 @@ package com.multitap.review.review.domain;
 
 import com.multitap.review.common.entity.BaseEntity;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -37,6 +38,10 @@ public class Review extends BaseEntity {
     @Column(nullable = false)
     private String mentoringUuid;
 
+    @Comment("멘토링 세션 uuid")
+    @Column(nullable = false)
+    private String mentoringSessionUuid;
+
     @Comment("멘티 uuid")
     @Column(nullable = false)
     private String menteeUuid;
@@ -51,5 +56,31 @@ public class Review extends BaseEntity {
 
     @Comment("삭제 여부")
     @Column(nullable = false)
-    private boolean idDeleted;
+    private boolean isDeleted;
+
+    @Builder
+
+    public Review(Long id,
+                  String reviewCode,
+                  String title,
+                  String comment,
+                  int score,
+                  String mentoringUuid,
+                  String mentoringSessionUuid,
+                  String menteeUuid,
+                  boolean isReported,
+                  boolean isConfirmed,
+                  boolean isDeleted) {
+        this.id = id;
+        this.reviewCode = reviewCode;
+        this.title = title;
+        this.comment = comment;
+        this.score = score;
+        this.mentoringUuid = mentoringUuid;
+        this.mentoringSessionUuid = mentoringSessionUuid;
+        this.menteeUuid = menteeUuid;
+        this.isReported = isReported;
+        this.isConfirmed = isConfirmed;
+        this.isDeleted = isDeleted;
+    }
 }
