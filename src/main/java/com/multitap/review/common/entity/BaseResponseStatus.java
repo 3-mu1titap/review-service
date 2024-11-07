@@ -108,7 +108,8 @@ public enum BaseResponseStatus {
     /**
      * 8000: review service error
      */
-    ALREADY_WRITTEN_REVIEW(HttpStatus.FORBIDDEN, false, 8000, "이미 리뷰를 작성했습니다.");
+    ALREADY_WRITTEN_REVIEW(HttpStatus.BAD_REQUEST, false, 8000, "이미 리뷰를 작성했습니다."),
+    REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, false, 8001, "해당 리뷰를 찾을 수 없습니다.");
 
     private final HttpStatusCode httpStatusCode;
     private final boolean isSuccess;

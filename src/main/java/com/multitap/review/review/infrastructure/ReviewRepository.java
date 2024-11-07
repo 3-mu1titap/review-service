@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     boolean existsByMenteeUuidAndMentoringSessionUuid(String menteeUuid, String mentoringSessionUuid);
+    Optional<Review> findByReviewCodeAndMenteeUuid(String reviewCode, String menteeUuid);
 }

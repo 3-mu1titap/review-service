@@ -3,7 +3,9 @@ package com.multitap.review.review.application;
 import com.multitap.review.common.entity.BaseResponseStatus;
 import com.multitap.review.common.exception.BaseException;
 import com.multitap.review.common.utils.ReviewUuidGenerator;
+import com.multitap.review.review.domain.Review;
 import com.multitap.review.review.dto.in.CreateReviewRequestDto;
+import com.multitap.review.review.dto.in.UpdateReviewRequestDto;
 import com.multitap.review.review.infrastructure.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,5 +36,16 @@ public class ReviewServiceImpl implements ReviewService {
         }
 
         reviewRepository.save(createReviewRequestDto.toReview(reviewCode));
+    }
+
+    @Override
+    @Transactional
+    public void updateReview(UpdateReviewRequestDto updateReviewRequestDto) {
+        log.info("Updating review {}", updateReviewRequestDto);
+
+        Review updateReview = reviewRepository.findByReviewCodeAndMenteeUuid(updateReviewRequestDto.getReviewCode(), updateReviewRequestDto.getMenteeUuid())
+                .orElseThrow(() -> new BaseException(REVIEW_NOT_FOUND));
+
+        reviewRepository.save(updateReviewRequestDto.updateReview(updateReview));
     }
 }
