@@ -59,7 +59,6 @@ public class Review extends BaseEntity {
     private boolean isDeleted;
 
     @Builder
-
     public Review(Long id,
                   String reviewCode,
                   String title,

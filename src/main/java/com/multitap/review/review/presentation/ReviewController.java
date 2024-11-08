@@ -3,6 +3,7 @@ package com.multitap.review.review.presentation;
 import com.multitap.review.common.entity.BaseResponse;
 import com.multitap.review.review.application.ReviewService;
 import com.multitap.review.review.dto.in.CreateReviewRequestDto;
+import com.multitap.review.review.dto.in.SoftDeleteReviewRequestDto;
 import com.multitap.review.review.dto.in.UpdateReviewRequestDto;
 import com.multitap.review.review.vo.in.CreateReviewRequestVo;
 import com.multitap.review.review.vo.in.UpdateReviewRequestVo;
@@ -33,6 +34,15 @@ public class ReviewController {
             @RequestBody UpdateReviewRequestVo updateReviewRequestVo) {
         log.info("Update review request: {}", updateReviewRequestVo);
         reviewService.updateReview(UpdateReviewRequestDto.from(updateReviewRequestVo, menteeUuid));
+        return new BaseResponse<>();
+    }
+
+    @PutMapping("/softDelete/{reviewCode}")
+    public BaseResponse<Void> softDeleteReview(
+            @RequestHeader ("Uuid") String menteeUuid,
+            @PathVariable String reviewCode) {
+        log.info("Soft delete review request: {}", reviewCode);
+        reviewService.softDeleteReview(SoftDeleteReviewRequestDto.of(reviewCode, menteeUuid));
         return new BaseResponse<>();
     }
 }

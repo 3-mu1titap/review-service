@@ -5,6 +5,7 @@ import com.multitap.review.common.exception.BaseException;
 import com.multitap.review.common.utils.ReviewUuidGenerator;
 import com.multitap.review.review.domain.Review;
 import com.multitap.review.review.dto.in.CreateReviewRequestDto;
+import com.multitap.review.review.dto.in.SoftDeleteReviewRequestDto;
 import com.multitap.review.review.dto.in.UpdateReviewRequestDto;
 import com.multitap.review.review.infrastructure.ReviewRepository;
 import lombok.RequiredArgsConstructor;
@@ -47,5 +48,18 @@ public class ReviewServiceImpl implements ReviewService {
                 .orElseThrow(() -> new BaseException(REVIEW_NOT_FOUND));
 
         reviewRepository.save(updateReviewRequestDto.updateReview(updateReview));
+    }
+
+    @Override
+    @Transactional
+    public void softDeleteReview(SoftDeleteReviewRequestDto softDeleteReviewRequestDto) {
+        log.info("Deleting review {}", softDeleteReviewRequestDto);
+
+        Review softDeleteReview = reviewRepository.findByReviewCodeAndMenteeUuid(
+                softDeleteReviewRequestDto.getReviewCode(),
+                        softDeleteReviewRequestDto.getMenteeUuid())
+                .orElseThrow(() -> new BaseException(REVIEW_NOT_FOUND));
+
+        reviewRepository.save(softDeleteReviewRequestDto.SoftDeleteReview(softDeleteReview));
     }
 }
