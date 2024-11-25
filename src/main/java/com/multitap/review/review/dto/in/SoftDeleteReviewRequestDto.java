@@ -21,8 +21,6 @@ public class SoftDeleteReviewRequestDto {
                 .mentoringUuid(review.getMentoringUuid())
                 .mentoringSessionUuid(review.getMentoringSessionUuid())
                 .menteeUuid(menteeUuid)
-                .isReported(review.isReported())
-                .isConfirmed(review.isConfirmed())
                 .isDeleted(true)
                 .build();
     }

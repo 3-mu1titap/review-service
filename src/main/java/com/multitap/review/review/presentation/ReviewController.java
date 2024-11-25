@@ -21,7 +21,7 @@ public class ReviewController {
 
     @PostMapping
     public BaseResponse<Void> createReview(
-            @RequestHeader ("Uuid") String menteeUuid,
+            @RequestHeader ("userUuid") String menteeUuid,
             @RequestBody CreateReviewRequestVo createReviewRequestVo) {
         log.info("Create review request: {}", createReviewRequestVo);
         reviewService.createReview(CreateReviewRequestDto.from(createReviewRequestVo, menteeUuid));
@@ -30,7 +30,7 @@ public class ReviewController {
 
     @PutMapping
     public BaseResponse<Void> updateReview(
-            @RequestHeader ("Uuid") String menteeUuid,
+            @RequestHeader ("userUuid") String menteeUuid,
             @RequestBody UpdateReviewRequestVo updateReviewRequestVo) {
         log.info("Update review request: {}", updateReviewRequestVo);
         reviewService.updateReview(UpdateReviewRequestDto.from(updateReviewRequestVo, menteeUuid));
@@ -39,7 +39,7 @@ public class ReviewController {
 
     @PutMapping("/softDelete/{reviewCode}")
     public BaseResponse<Void> softDeleteReview(
-            @RequestHeader ("Uuid") String menteeUuid,
+            @RequestHeader ("userUuid") String menteeUuid,
             @PathVariable String reviewCode) {
         log.info("Soft delete review request: {}", reviewCode);
         reviewService.softDeleteReview(SoftDeleteReviewRequestDto.of(reviewCode, menteeUuid));
