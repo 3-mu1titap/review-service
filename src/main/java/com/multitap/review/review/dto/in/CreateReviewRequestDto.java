@@ -16,8 +16,6 @@ public class CreateReviewRequestDto {
     private String mentoringUuid;
     private String mentoringSessionUuid;
     private String menteeUuid;
-    private boolean isReported;
-    private boolean isConfirmed;
     private boolean isDeleted;
 
     public Review toReview(String reviewCode) {
@@ -29,8 +27,6 @@ public class CreateReviewRequestDto {
                 .mentoringUuid(mentoringUuid)
                 .mentoringSessionUuid(mentoringSessionUuid)
                 .menteeUuid(menteeUuid)
-                .isReported(isReported)
-                .isConfirmed(isConfirmed)
                 .isDeleted(isDeleted)
                 .build();
     }
@@ -43,8 +39,6 @@ public class CreateReviewRequestDto {
                 .mentoringUuid(createReviewRequestVo.getMentoringUuid())
                 .mentoringSessionUuid(createReviewRequestVo.getMentoringSessionUuid())
                 .menteeUuid(menteeUuid)
-                .isReported(false)
-                .isConfirmed(false)
                 .isDeleted(false)
                 .build();
     }
@@ -56,8 +50,6 @@ public class CreateReviewRequestDto {
                                   String mentoringUuid,
                                   String mentoringSessionUuid,
                                   String menteeUuid,
-                                  boolean isReported,
-                                  boolean isConfirmed,
                                   boolean isDeleted) {
         this.title = title;
         this.comment = comment;
@@ -65,8 +57,6 @@ public class CreateReviewRequestDto {
         this.mentoringUuid = mentoringUuid;
         this.mentoringSessionUuid = mentoringSessionUuid;
         this.menteeUuid = menteeUuid;
-        this.isReported = false;
-        this.isConfirmed = false;
         this.isDeleted = false;
     }
 }
