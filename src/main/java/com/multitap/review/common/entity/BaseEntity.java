@@ -17,10 +17,9 @@ public abstract class BaseEntity {
 
     @CreatedDate
     @Column(updatable = false)
-    private LocalDateTime createdDate; // 생성일
+    private LocalDateTime createdAt; // 생성일
 
     @LastModifiedDate
-    private LocalDateTime lastModifiedDate; // 수정일
-
+    private LocalDateTime updatedAt; // 수정일
 
 }

@@ -9,4 +9,5 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     boolean existsByMenteeUuidAndMentoringSessionUuid(String menteeUuid, String mentoringSessionUuid);
     Optional<Review> findByReviewCodeAndMenteeUuid(String reviewCode, String menteeUuid);
+    Review findByReviewCode(String reviewCode);
 }

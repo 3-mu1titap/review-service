@@ -7,6 +7,7 @@ import com.multitap.review.review.dto.in.SoftDeleteReviewRequestDto;
 import com.multitap.review.review.dto.in.UpdateReviewRequestDto;
 import com.multitap.review.review.vo.in.CreateReviewRequestVo;
 import com.multitap.review.review.vo.in.UpdateReviewRequestVo;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
+    @Operation(summary = "리뷰 작성", description = "리뷰를 작성합니다.")
     @PostMapping
     public BaseResponse<Void> createReview(
             @RequestHeader ("userUuid") String menteeUuid,
@@ -28,6 +30,7 @@ public class ReviewController {
         return new BaseResponse<>();
     }
 
+    @Operation(summary = "리뷰 수정", description = "리뷰를 수정합니다.")
     @PutMapping
     public BaseResponse<Void> updateReview(
             @RequestHeader ("userUuid") String menteeUuid,
@@ -37,6 +40,7 @@ public class ReviewController {
         return new BaseResponse<>();
     }
 
+    @Operation(summary = "리뷰 삭제", description = "리뷰를 삭제합니다.(softDelete)")
     @PutMapping("/softDelete/{reviewCode}")
     public BaseResponse<Void> softDeleteReview(
             @RequestHeader ("userUuid") String menteeUuid,
