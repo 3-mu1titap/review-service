@@ -8,6 +8,8 @@ import com.multitap.review.review.dto.in.CreateReviewRequestDto;
 import com.multitap.review.review.dto.in.SoftDeleteReviewRequestDto;
 import com.multitap.review.review.dto.in.UpdateReviewRequestDto;
 import com.multitap.review.review.infrastructure.ReviewRepository;
+import com.multitap.review.review.kafka.producer.KafkaProducerService;
+import com.multitap.review.review.kafka.producer.ReviewDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ import static com.multitap.review.common.entity.BaseResponseStatus.*;
 public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
+    private final KafkaProducerService kafkaProducerService;
 
     @Override
     @Transactional
@@ -36,7 +39,11 @@ public class ReviewServiceImpl implements ReviewService {
             throw new BaseException(ALREADY_WRITTEN_REVIEW);
         }
 
-        reviewRepository.save(createReviewRequestDto.toReview(reviewCode));
+        ReviewDto reviewDto = ReviewDto.from(reviewRepository.save(createReviewRequestDto.toReview(reviewCode)));
+
+        log.info("Review {}", reviewDto);
+
+        kafkaProducerService.sendReview(reviewDto);
     }
 
     @Override
@@ -47,7 +54,11 @@ public class ReviewServiceImpl implements ReviewService {
         Review updateReview = reviewRepository.findByReviewCodeAndMenteeUuid(updateReviewRequestDto.getReviewCode(), updateReviewRequestDto.getMenteeUuid())
                 .orElseThrow(() -> new BaseException(REVIEW_NOT_FOUND));
 
-        reviewRepository.save(updateReviewRequestDto.updateReview(updateReview));
+        ReviewDto reviewDto = ReviewDto.from(reviewRepository.save(updateReviewRequestDto.updateReview(updateReview)));
+
+        log.info("Review {}", reviewDto);
+
+        kafkaProducerService.sendReview(reviewDto);
     }
 
     @Override
@@ -60,6 +71,10 @@ public class ReviewServiceImpl implements ReviewService {
                         softDeleteReviewRequestDto.getMenteeUuid())
                 .orElseThrow(() -> new BaseException(REVIEW_NOT_FOUND));
 
-        reviewRepository.save(softDeleteReviewRequestDto.SoftDeleteReview(softDeleteReview));
+        ReviewDto reviewDto = ReviewDto.from(reviewRepository.save(softDeleteReviewRequestDto.SoftDeleteReview(softDeleteReview)));
+
+        log.info("Review {}", reviewDto);
+
+        kafkaProducerService.sendReview(reviewDto);
     }
 }
