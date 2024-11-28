@@ -2,7 +2,6 @@ package com.multitap.review.review.vo.in;
 
 import lombok.Getter;
 import lombok.ToString;
-import org.bouncycastle.crypto.agreement.srp.SRP6Client;
 
 @Getter
 @ToString

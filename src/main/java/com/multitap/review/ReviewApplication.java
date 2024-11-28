@@ -2,10 +2,10 @@ package com.multitap.review;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+//import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-@EnableDiscoveryClient
+//@EnableDiscoveryClient
 @EnableJpaAuditing
 @SpringBootApplication
 public class ReviewApplication {
