@@ -13,4 +13,5 @@ public class CreateReviewRequestVo {
     private int score;
     private String mentoringUuid;
     private String mentoringSessionUuid;
+    private String mentorUuid;
 }
