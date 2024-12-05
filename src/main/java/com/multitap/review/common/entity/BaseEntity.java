@@ -20,6 +20,7 @@ public abstract class BaseEntity {
     private LocalDateTime createdAt; // 생성일
 
     @LastModifiedDate
+    @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime updatedAt; // 수정일
 
 }

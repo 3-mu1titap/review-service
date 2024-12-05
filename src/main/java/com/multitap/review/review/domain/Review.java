@@ -46,6 +46,10 @@ public class Review extends BaseEntity {
     @Column(nullable = false)
     private String menteeUuid;
 
+    @Comment("멘토 uuid")
+    @Column(nullable = false)
+    private String mentorUuid;
+
     @Comment("삭제 여부")
     @Column(nullable = false)
     private boolean isDeleted;
@@ -59,6 +63,7 @@ public class Review extends BaseEntity {
                   String mentoringUuid,
                   String mentoringSessionUuid,
                   String menteeUuid,
+                  String mentorUuid,
                   boolean isDeleted) {
         this.id = id;
         this.reviewCode = reviewCode;
@@ -68,6 +73,7 @@ public class Review extends BaseEntity {
         this.mentoringUuid = mentoringUuid;
         this.mentoringSessionUuid = mentoringSessionUuid;
         this.menteeUuid = menteeUuid;
+        this.mentorUuid = mentorUuid;
         this.isDeleted = isDeleted;
     }
 }
