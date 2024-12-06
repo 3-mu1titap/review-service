@@ -49,4 +49,5 @@ public class ReviewController {
         reviewService.softDeleteReview(SoftDeleteReviewRequestDto.of(reviewCode, menteeUuid));
         return new BaseResponse<>();
     }
+
 }
