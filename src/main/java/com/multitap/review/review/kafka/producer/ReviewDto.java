@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @ToString
 @Getter
 @NoArgsConstructor
-public class ReviewDto {
+public class    ReviewDto {
 
     private String reviewCode;
     private String reviewTitle;
