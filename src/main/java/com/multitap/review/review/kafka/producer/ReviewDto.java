@@ -23,9 +23,11 @@ public class ReviewDto {
     private int score;
     private boolean isDeleted;
     private LocalDateTime wroteAt;
+    private String mentoringName;
+    private String nickName;
 
     @Builder
-    public ReviewDto(String reviewCode, String reviewTitle, String reviewComment, String menteeUuid, String mentorUuid, String mentoringUuid, String mentoringSessionUuid, int score, boolean isDeleted, LocalDateTime wroteAt) {
+    public ReviewDto(String reviewCode, String reviewTitle, String reviewComment, String menteeUuid, String mentorUuid, String mentoringUuid, String mentoringSessionUuid, int score, boolean isDeleted, LocalDateTime wroteAt, String mentoringName, String nickName) {
         this.reviewCode = reviewCode;
         this.reviewTitle = reviewTitle;
         this.reviewComment = reviewComment;
@@ -36,6 +38,25 @@ public class ReviewDto {
         this.score = score;
         this.isDeleted = isDeleted;
         this.wroteAt = wroteAt;
+        this.mentoringName = mentoringName;
+        this.nickName = nickName;
+    }
+
+    public static ReviewDto createFrom(Review review, String mentoringName, String nickName) {
+        return ReviewDto.builder()
+                .reviewCode(review.getReviewCode())
+                .reviewTitle(review.getTitle())
+                .reviewComment(review.getComment())
+                .menteeUuid(review.getMenteeUuid())
+                .mentorUuid(review.getMentorUuid())
+                .mentoringUuid(review.getMentoringUuid())
+                .mentoringSessionUuid(review.getMentoringSessionUuid())
+                .score(review.getScore())
+                .isDeleted(review.isDeleted())
+                .wroteAt(review.getCreatedAt())
+                .mentoringName(mentoringName)
+                .nickName(nickName)
+                .build();
     }
 
     public static ReviewDto from(Review review) {

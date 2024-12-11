@@ -26,7 +26,7 @@ public class ReviewController {
             @RequestHeader ("userUuid") String menteeUuid,
             @RequestBody CreateReviewRequestVo createReviewRequestVo) {
         log.info("Create review request: {}", createReviewRequestVo);
-        reviewService.createReview(CreateReviewRequestDto.from(createReviewRequestVo, menteeUuid));
+        reviewService.createReview(CreateReviewRequestDto.from(createReviewRequestVo, menteeUuid), createReviewRequestVo.getMentoringName(), createReviewRequestVo.getNickName());
         return new BaseResponse<>();
     }
 
