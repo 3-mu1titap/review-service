@@ -28,7 +28,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
-    public void createReview(CreateReviewRequestDto createReviewRequestDto) {
+    public void createReview(CreateReviewRequestDto createReviewRequestDto, String mentoringName, String nickName) {
         log.info("Creating review {}", createReviewRequestDto);
 
         String reviewCode = ReviewUuidGenerator.generateUniqueReviewCode("RV-");
@@ -39,7 +39,7 @@ public class ReviewServiceImpl implements ReviewService {
             throw new BaseException(ALREADY_WRITTEN_REVIEW);
         }
 
-        ReviewDto reviewDto = ReviewDto.from(reviewRepository.save(createReviewRequestDto.toReview(reviewCode)));
+        ReviewDto reviewDto = ReviewDto.createFrom(reviewRepository.save(createReviewRequestDto.toReview(reviewCode)), mentoringName, nickName);
 
         log.info("Review {}", reviewDto);
 
