@@ -6,7 +6,6 @@ import com.multitap.review.review.infrastructure.ReviewRepository;
 import com.multitap.review.review.kafka.ReviewDataDto;
 import com.multitap.review.review.kafka.consumer.messagein.MemberUuidDataDto;
 import com.multitap.review.review.kafka.consumer.messagein.MentoringDataDto;
-
 import com.multitap.review.review.kafka.producer.KafkaProducerService;
 import com.multitap.review.review.kafka.producer.ReviewDto;
 import lombok.RequiredArgsConstructor;
@@ -21,16 +20,11 @@ import java.util.Random;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-@Transactional
 public class KafkaConsumer {
 
     private final ReviewRepository reviewRepository;
     private final KafkaProducerService kafkaProducerService;
 
-    private boolean mentoringDataReceived = false;
-    private boolean memberDataReceived = false;
-
-    // 여기에 제목 리스트를 추가하시면 됩니다
     private final List<String> titles = List.of(
             "멘토링 후기입니다",
             "유익했던 멘토링",
@@ -44,7 +38,6 @@ public class KafkaConsumer {
             "감동적인 멘토링"
     );
 
-    // 여기에 내용 리스트를 추가하시면 됩니다
     private final List<String> comments = List.of(
             "멘토님의 전문적인 조언 덕분에 많은 도움이 되었습니다. 특히 실무 경험을 바탕으로 한 조언들이 매우 유익했어요.",
             "처음에는 망설였는데 멘토링을 받고나서 진로에 대한 확신이 생겼습니다. 구체적인 방향을 제시해주셔서 감사합니다.",
@@ -59,64 +52,68 @@ public class KafkaConsumer {
     );
 
     private ReviewDataDto reviewDataDto = new ReviewDataDto();
+    private boolean mentoringDataReceived = false;
+    private boolean memberDataReceived = false;
 
     @KafkaListener(topics = "mentoring-data", containerFactory = "mentoringDtoListener")
     public void processMentoringData(MentoringDataDto mentoringDataDto) {
+        log.info("Received mentoring data: {}", mentoringDataDto);
         reviewDataDto.setMentoringUuid(mentoringDataDto.getMentoringUuid());
         reviewDataDto.setMentoringSessionUuid(mentoringDataDto.getSessionUuid());
         mentoringDataReceived = true;
-
         checkAndProcess();
     }
 
     @KafkaListener(topics = "member-data", containerFactory = "memberUuidDtoListener")
     public void processMemberUuidData(MemberUuidDataDto memberUuidDataDto) {
+        log.info("Received member data: {}", memberUuidDataDto);
         reviewDataDto.setMenteeUuid(memberUuidDataDto.getMenteeUuid());
         reviewDataDto.setMentorUuid(memberUuidDataDto.getMentorUuid());
         memberDataReceived = true;
-
         checkAndProcess();
     }
 
     private void checkAndProcess() {
         if (mentoringDataReceived && memberDataReceived) {
-            buildReviewDataDto();
             createAndSaveReviews();
-            mentoringDataReceived = false;
-            memberDataReceived = false;
+            resetState();
         }
-    }
-
-    private void buildReviewDataDto() {
-        log.info("ReviewDataDto prepared: {}", reviewDataDto);
     }
 
     private void createAndSaveReviews() {
         Random random = new Random();
+        int mentoringSize = reviewDataDto.getMentoringUuid().size();
+        int menteeSize = reviewDataDto.getMenteeUuid().size();
+        int mentorSize = reviewDataDto.getMentorUuid().size();
 
-        for (int i = 0; i < reviewDataDto.getMentoringUuid().size(); i++) {
-            int score = random.nextInt(3) + 3;
-            String title = titles.get(random.nextInt(titles.size()));
-            String comment = comments.get(random.nextInt(comments.size()));
+        for (int i = 0; i < mentoringSize; i++) {
+            // 리스트 길이에 관계없이 반복적으로 값을 가져올 수 있도록 인덱스 계산
+            int menteeIndex = i % menteeSize;
+            int mentorIndex = i % mentorSize;
 
             Review review = Review.builder()
                     .reviewCode(ReviewUuidGenerator.generateUniqueReviewCode("RV-"))
-                    .title(title)
-                    .comment(comment)
-                    .score(score)
+                    .title(titles.get(random.nextInt(titles.size())))
+                    .comment(comments.get(random.nextInt(comments.size())))
+                    .score(random.nextInt(3) + 3) // 3-5점 사이의 랜덤 점수
                     .mentoringUuid(reviewDataDto.getMentoringUuid().get(i))
                     .mentoringSessionUuid(reviewDataDto.getMentoringSessionUuid().get(i))
-                    .menteeUuid(reviewDataDto.getMenteeUuid().get(i))
-                    .mentorUuid(reviewDataDto.getMentorUuid().get(i))
+                    .menteeUuid(reviewDataDto.getMenteeUuid().get(menteeIndex))  // 순환되는 인덱스 사용
+                    .mentorUuid(reviewDataDto.getMentorUuid().get(mentorIndex))  // 순환되는 인덱스 사용
                     .isDeleted(false)
                     .build();
 
-            log.info("Review saved: {}", review);
+            Review savedReview = reviewRepository.save(review);
+            log.info("Review saved: {}", savedReview);
 
-            ReviewDto reviewDto = ReviewDto.from(reviewRepository.save(review));
+            ReviewDto reviewDto = ReviewDto.from(savedReview);
             kafkaProducerService.sendReview(reviewDto);
         }
+    }
 
+    private void resetState() {
         reviewDataDto = new ReviewDataDto();
+        mentoringDataReceived = false;
+        memberDataReceived = false;
     }
 }
