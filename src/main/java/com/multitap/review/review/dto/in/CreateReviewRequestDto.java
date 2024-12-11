@@ -2,12 +2,15 @@ package com.multitap.review.review.dto.in;
 
 import com.multitap.review.review.domain.Review;
 import com.multitap.review.review.vo.in.CreateReviewRequestVo;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @ToString
 @Getter
+@NoArgsConstructor
 public class CreateReviewRequestDto {
 
     private String title;
