@@ -13,6 +13,7 @@ public class CreateReviewRequestVo {
     private String mentoringUuid;
     private String mentoringSessionUuid;
     private String mentorUuid;
+    private String menteeUuid;
     private String mentoringName;
     private String nickName;
 }
