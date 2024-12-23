@@ -1,6 +1,6 @@
 package com.multitap.review.review.application;
 
-import com.multitap.review.common.entity.BaseResponseStatus;
+
 import com.multitap.review.common.exception.BaseException;
 import com.multitap.review.common.utils.ReviewUuidGenerator;
 import com.multitap.review.review.domain.Review;
